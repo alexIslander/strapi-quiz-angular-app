@@ -3,12 +3,17 @@
     <div *ngIf="quizzes$ | async as quizzes" class="vw-75 d-flex align-items-center justify-content-center flex-wrap">
         <div *ngFor="let quiz of quizzes" class="align-self-start m-2 card quiz-card">
             <div class="card-body d-flex flex-column  flex-grow-1">
-                <h5 class="card-title font-weight-bold">{{quiz.name}}</h5>
+                <h5 class="card-title font-weight-bold">{{quiz.title}}</h5>
                 <p class="card-text">{{quiz.description}}</p>
             </div>
             <ul class="list-group list-group-flush  flex-shrink-1">
-                <li class="list-group-item">Questions: {{quiz.questions.length}}</li>
-                <li class="list-group-item"><a [routerLink]="['/quiz', quiz.id]" class="btn btn-sm">Take Quiz</a></li>
+                <li class="list-group-item">Questions: {{quiz.questions?.length}}</li>
+                <li class="list-group-item">
+                    <button *ngIf="{ status: auth.loggedInStatus$ | async } as isLoggedIn" type="button"
+                        [routerLink]="['/quizzes', quiz.id]" class="btn btn-sm" [disabled]="!isLoggedIn.status">
+                        {{ isLoggedIn.status ? 'Take Quiz' : 'Login to attempt' }}
+                    </button>
+                </li>
             </ul>
         </div>
     </div>

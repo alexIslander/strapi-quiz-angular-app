@@ -6,8 +6,8 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./title.component.css']
 })
 export class TitleComponent {
-  @Input() title = '';
-  @Input() subtitle = '';
+  @Input() title: string | undefined = '';
+  @Input() subtitle: string | undefined = '';
 
   constructor() { }
 }

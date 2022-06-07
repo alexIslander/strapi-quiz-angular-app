@@ -1,0 +1,14 @@
+<div class="d-flex flex-column align-items-center">
+    <app-title title="Login" subtitle="Login to take a quiz"></app-title>
+    <form class="d-flex flex-column align-items-center mt-3" [formGroup]="loginForm" (ngSubmit)="login()">
+        <div class="form-group d-flex flex-column  align-items-center">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" class="form-control login-input" formControlName="email">
+        </div>
+        <div class="form-group d-flex flex-column  align-items-center">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control login-input" formControlName="password">
+        </div>
+        <button type="submit" class="btn btn-dark" [disabled]="!loginForm.valid">Login</button>
+    </form>
+</div>

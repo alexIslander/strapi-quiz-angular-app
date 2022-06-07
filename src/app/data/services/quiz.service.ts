@@ -1,27 +1,37 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { UserAnswer } from '../models/user-answer';
 import { Quiz } from '../models/quiz';
-import { Score } from '../models/score';
+import { NormalizationService } from './normalization.service';
+
+interface StrapiResponse {
+  data: any;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuizService {
   private url = `${environment.strapiUrl}/quizzes`;
+  private populateQuestionsParam = { params: new HttpParams().set('populate', '*') };
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private ns: NormalizationService) { }
 
-  getQuizzes() {
-    return this.http.get<Quiz[]>(this.url);
+  getQuizzes(): Observable<Quiz[]> {
+    return this.http.get<StrapiResponse>(
+      this.url,
+      this.populateQuestionsParam
+    )
+      .pipe(this.ns.restructureArrayedAttributes('questions'));
   }
 
-  getQuiz(id: number) {
-    return this.http.get<Quiz>(`${this.url}/${id}`);
-  }
-
-  score(id: number, answers: UserAnswer[]) {
-    return this.http.post<Score>(`${this.url}/${id}/score`, answers);
+  getQuiz(id: number): Observable<Quiz> {
+    return this.http.get<StrapiResponse>(`${this.url}/${id}`,
+      this.populateQuestionsParam
+    )
+      .pipe(
+        this.ns.restructureAttributes('questions')
+      );
   }
 }

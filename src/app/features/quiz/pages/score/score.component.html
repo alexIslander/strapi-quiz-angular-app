@@ -1,22 +1,22 @@
-<div *ngIf="!(score$ | async)" class="flex-grow-1 vw-95 d-flex flex-column align-items-center">
-    <app-title title="No Results Yet" subtitle="You have to take a quiz to view results"></app-title>
-    <div class="card app-bg-light-purple m-2">
-        <div class="card-body d-flex align-items-center flex-column">
-            <h4 class="font-weight-normal text-center mb-3 ">You haven't provided any answers<br>for this quiz.</h4>
-            <button routerLink="/" type="button" class="btn btn-sm app-bg-purple">See Available Quizzes</button>
-        </div>
-    </div>
-</div>
-<div *ngIf="score$ | async as score" class="d-flex flex-column text-center align-items-center">
-    <app-title [title]="score.quiz.name" [subtitle]="score.quiz.description"></app-title>
+<ng-template #noScore>
+    <app-message title="No Results Yet" subtitle="You have to take a quiz to view results"
+        message="You haven't provided any answers for this quiz." buttonText="See Available Quizzes" redirectPath="/">
+    </app-message>
+</ng-template>
+<div *ngIf="scoreResp$ | async as scoreResp;else noScore"
+    class="d-flex flex-column justify-content-center align-items-center text-center">
+    <app-title [title]="scoreResp?.quiz?.title" [subtitle]="scoreResp?.quiz?.description"></app-title>
+    <h5 class="font-weight-lighter pl-2 pr-2">
+        {{scoreResp.score.createdAt | date:'fullDate'}} - {{scoreResp.score.createdAt | date:'shortTime'}}
+    </h5>
     <hr class="vw-25">
     <h2 class="font-weight-bold">You scored:</h2>
-    <h1 class="d-none d-lg-flex display-3 font-weight-bold app-bg-light-yellow p-2 result rounded">
-        {{score.score}}/{{score.questionCount}}</h1>
-    <h1 class="d-md-flex d-lg-none display-3 font-weight-bold app-bg-light-yellow p-2 result rounded">
-        {{score.score}}/{{score.questionCount}}</h1>
+    <h1 class="d-none d-lg-flex display-3 font-weight-bold app-bg-light-green p-2 result rounded">
+        {{scoreResp.scoreTotal}}/{{scoreResp.questionCount}}</h1>
+    <h1 class="d-md-flex d-lg-none display-3 font-weight-bold app-bg-light-green p-2 result rounded">
+        {{scoreResp.scoreTotal}}/{{scoreResp.questionCount}}</h1>
     <h2 class="mt-3 font-weight-bold">Your answers:</h2>
-    <table class="table app-bg-light-blue">
+    <table class="table app-bg-light-green">
         <thead>
             <tr>
                 <th scope="col">#</th>
@@ -26,11 +26,11 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let answ of score.scoredAnswers; index as no">
+            <tr *ngFor="let answ of scoreResp.score.answers; index as no">
                 <th scope="row">{{no + 1}}</th>
-                <td>{{answ.value}}</td>
+                <td>{{answ.value | uppercase}}</td>
                 <td>{{answ.correct ? '✅' : '❌'}}</td>
-                <td>{{answ.correctValue || answ.value}}</td>
+                <td>{{(answ.correctValue || answ.value) | uppercase}}</td>
             </tr>
         </tbody>
     </table>
