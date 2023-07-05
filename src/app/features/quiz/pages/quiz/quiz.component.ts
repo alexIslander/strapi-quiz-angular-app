@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { Quiz } from 'src/app/data/models/quiz';
 import { QuizService } from 'src/app/data/services/quiz.service';
 import { switchMap } from 'rxjs/operators';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Answer } from 'src/app/data/models/answer';
 
 @Component({
@@ -14,7 +14,7 @@ import { Answer } from 'src/app/data/models/answer';
 })
 export class QuizComponent implements OnInit, OnDestroy {
   quiz!: Quiz;
-  quizForm: FormGroup = new FormGroup({});
+  quizForm: UntypedFormGroup = new UntypedFormGroup({});
   quizId = 0;
 
   private quizSub!: Subscription;
@@ -41,7 +41,7 @@ export class QuizComponent implements OnInit, OnDestroy {
 
         if (quiz.questions) {
           quiz.questions.forEach(question => {
-            this.quizForm.addControl(question.id.toString(), new FormControl('', Validators.required));
+            this.quizForm.addControl(question.id.toString(), new UntypedFormControl('', Validators.required));
           });
         }
       }

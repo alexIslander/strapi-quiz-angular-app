@@ -1,5 +1,5 @@
 <div *ngIf="quiz" class="d-flex flex-column align-items-center">
-    <app-title [title]="quiz?.title" [subtitle]="quiz?.description"></app-title>
+    <app-title [title]="quiz.title" [subtitle]="quiz.description"></app-title>
     <form class="d-flex flex-column" [formGroup]="quizForm" *ngIf="(quiz?.questions?.length ?? 0) > 0"
         (ngSubmit)="score()">
         <ngb-carousel [animation]="false" [interval]="0" [wrap]="false">
